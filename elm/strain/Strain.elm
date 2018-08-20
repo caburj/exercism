@@ -2,10 +2,18 @@ module Strain exposing (discard, keep)
 
 
 keep : (a -> Bool) -> List a -> List a
-keep predicate list =
-    Debug.crash "Please implement this function"
+keep =
+    List.filter
 
 
 discard : (a -> Bool) -> List a -> List a
 discard predicate list =
-    Debug.crash "Please implement this function"
+    case list of
+        [] ->
+            []
+
+        x :: xs ->
+            if predicate x then
+                discard predicate xs
+            else
+                x :: discard predicate xs

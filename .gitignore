@@ -8,3 +8,7 @@
 # elm
 elm-stuff
 repl-temp-*
+
+# generic
+node_modules
+package-lock.json

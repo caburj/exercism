@@ -4,6 +4,7 @@ import Dict exposing (Dict)
 import Regex exposing (HowMany(..), regex, replace, split)
 
 
+
 -- look into each word. if word in the counter, update counter, else, insert.
 
 
@@ -21,6 +22,7 @@ updateCounter : Dict String Int -> String -> Dict String Int
 updateCounter counter word =
     if Dict.member word counter then
         Dict.update word increment counter
+
     else
         Dict.insert word 1 counter
 
@@ -35,12 +37,9 @@ increment maybeN =
             Just <| n + 1
 
 
-
-{- !
-   iterator: apply the function over and over until out of items
+{-| iterator: apply the function [to start and list item] over and over until out of items.
+Outputs the final value of start.
 -}
-
-
 iter : (b -> a -> b) -> b -> List a -> b
 iter f start list =
     case list of

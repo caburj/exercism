@@ -26,26 +26,21 @@ sublist alist blist =
             Superlist
 
         ( _, _ ) ->
-            sublist_ alist blist
+            let
+                alen =
+                    List.length alist
 
+                blen =
+                    List.length blist
+            in
+            if alen == blen then
+                iff (List.all identity <| List.map2 (==) alist blist) Equal Unequal
 
-sublist_ : List a -> List a -> ListComparison
-sublist_ alist blist =
-    let
-        alen =
-            List.length alist
+            else if alen < blen then
+                iff (subset alist blist) Sublist Unequal
 
-        blen =
-            List.length blist
-    in
-    if alen == blen then
-        iff (List.all identity <| List.map2 (==) alist blist) Equal Unequal
-
-    else if alen < blen then
-        iff (subset alist blist) Sublist Unequal
-
-    else
-        iff (subset blist alist) Superlist Unequal
+            else
+                iff (subset blist alist) Superlist Unequal
 
 
 subset : List a -> List a -> Bool

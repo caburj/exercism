@@ -3,4 +3,4 @@ module Leap exposing (isLeapYear)
 
 isLeapYear : Int -> Bool
 isLeapYear year =
-    Debug.crash "Please implement this function"
+    (year % 4 == 0) && (year % 100 /= 0) || (year % 400 == 0)

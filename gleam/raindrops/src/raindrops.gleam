@@ -1,17 +1,14 @@
 import gleam/int
 
 pub fn convert(number: Int) -> String {
-  let by_3 = number % 3 == 0
-  let by_5 = number % 5 == 0
-  let by_7 = number % 7 == 0
-  case #(by_3, by_5, by_7) {
-    #(True, True, True) -> "PlingPlangPlong"
-    #(True, True, False) -> "PlingPlang"
-    #(True, False, True) -> "PlingPlong"
-    #(False, True, True) -> "PlangPlong"
-    #(True, False, False) -> "Pling"
-    #(False, True, False) -> "Plang"
-    #(False, False, True) -> "Plong"
+  case #(number % 3, number % 5, number % 7) {
+    #(0, 0, 0) -> "PlingPlangPlong"
+    #(0, 0, _) -> "PlingPlang"
+    #(0, _, 0) -> "PlingPlong"
+    #(_, 0, 0) -> "PlangPlong"
+    #(0, _, _) -> "Pling"
+    #(_, 0, _) -> "Plang"
+    #(_, _, 0) -> "Plong"
     _ -> int.to_string(number)
   }
 }

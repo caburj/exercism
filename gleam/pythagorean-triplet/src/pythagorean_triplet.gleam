@@ -5,27 +5,13 @@ pub type Triplet {
 }
 
 pub fn triplets_with_sum(sum: Int) -> List(Triplet) {
-  sum
-  |> get_triangles
-  |> list.filter_map(fn(t) {
-    let #(a, b, c) = t
-    case is_triplet(a, b, c) {
-      True -> Ok(Triplet(a, b, c))
-      False -> Error("Not a triplet")
-    }
-  })
-}
-
-fn get_triangles(sum) {
-  list.range(1, sum)
-  |> list.flat_map(fn(a) {
-    list.range(a, sum)
-    |> list.flat_map(fn(b) {
-      list.range(b, sum)
-      |> list.filter(fn(c) { a + b + c == sum })
-      |> list.map(fn(c) { #(a, b, c) })
-    })
-  })
+  use a <- list.flat_map(list.range(1, sum - 2))
+  use b <- list.filter_map(list.range(a + 1, sum - 1))
+  let c = sum - a - b
+  case is_triplet(a, b, c) {
+    True -> Ok(Triplet(a, b, c))
+    False -> Error("Not a triplet")
+  }
 }
 
 fn is_triplet(a, b, c) {

@@ -1,3 +1,5 @@
+import gleam/result
+
 pub type Player {
   Black
   White
@@ -19,27 +21,24 @@ pub fn apply_rules(
   rule3: fn(Game) -> Result(Game, String),
   rule4: fn(Game) -> Result(Game, String),
 ) -> Game {
-  case rule1(game) {
-    Ok(g) -> {
-      case rule3(rule2(g)) {
-        Ok(g) -> {
-          case rule4(g) {
-            Ok(g) ->
-              Game(
-                ..g,
-                player: {
-                  case g.player {
-                    White -> Black
-                    Black -> White
-                  }
-                },
-              )
-            Error(msg) -> Game(..game, error: msg)
+  let applied_rules = {
+    use g1 <- result.try(rule1(game))
+    use g2 <- result.try(Ok(rule2(g1)))
+    use g3 <- result.try(rule3(g2))
+    use g4 <- result.map(rule4(g3))
+    g4
+  }
+  case applied_rules {
+    Ok(g) ->
+      Game(
+        ..g,
+        player: {
+          case g.player {
+            White -> Black
+            Black -> White
           }
-        }
-        Error(msg) -> Game(..game, error: msg)
-      }
-    }
-    Error(msg) -> Game(..game, error: msg)
+        },
+      )
+    Error(error) -> Game(..game, error: error)
   }
 }

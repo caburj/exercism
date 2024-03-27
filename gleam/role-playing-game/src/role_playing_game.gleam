@@ -28,6 +28,11 @@ pub fn revive(player: Player) -> Option(Player) {
 pub fn cast_spell(player: Player, cost: Int) -> #(Player, Int) {
   case player.mana {
     None -> #(Player(..player, health: max(0, player.health - cost)), 0)
-    Some(mana) -> #(Player(..player, mana: Some(max(0, mana - cost))), 2 * cost)
+    Some(mana) -> {
+      case mana < cost {
+        True -> #(player, 0)
+        False -> #(Player(..player, mana: Some(mana - cost)), 2 * cost)
+      }
+    }
   }
 }

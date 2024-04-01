@@ -2,27 +2,21 @@ import gleam/string
 import gleam/list
 
 pub fn is_paired(value: String) -> Bool {
-  let brackets =
-    value
-    |> string.to_graphemes
-    |> list.filter(is_bracket)
-
-  let rem = is_paired_iter(brackets, [])
-  list.is_empty(rem)
+  value
+  |> string.to_graphemes
+  |> list.filter(is_bracket)
+  |> is_paired_iter([])
 }
 
 fn is_paired_iter(brackets, stack) {
-  case brackets {
-    [] -> stack
-    [next, ..remaining] -> {
-      case stack {
-        [] -> is_paired_iter(remaining, [next])
-        [top, ..bottom] -> {
-          case closes(top, next) {
-            True -> is_paired_iter(remaining, bottom)
-            False -> is_paired_iter(remaining, [next, ..stack])
-          }
-        }
+  case brackets, stack {
+    [], [] -> True
+    [], _ -> False
+    [next, ..remaining], [] -> is_paired_iter(remaining, [next])
+    [next, ..remaining], [top, ..bottom] -> {
+      case closes(top, next) {
+        True -> is_paired_iter(remaining, bottom)
+        False -> is_paired_iter(remaining, [next, ..stack])
       }
     }
   }
